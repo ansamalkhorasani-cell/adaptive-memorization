@@ -3,7 +3,7 @@ import sys, io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 """
 Parameter Generalizability Validation
---------------------------------------
+
 Scientific proof that alpha=0.05 and W=10 are NOT overfit to the physical deployment.
 
 Two independent validation experiments:
@@ -27,9 +27,9 @@ print("PARAMETER GENERALIZABILITY VALIDATION")
 print("Scientific proof that alpha=0.05 and W=10 are not dataset-specific")
 print("=" * 70)
 
-# -------------------------------------------------------------------------
+
 # CORE: Adaptive Memorization Filter (identical to paper's Algorithm 1)
-# -------------------------------------------------------------------------
+
 def run_adaptive_filter(data, alpha, W, epsilon=0.001, delta_min=0.1):
     """Run the Adaptive Memorization filter and return metrics."""
     if len(data) < W + 1:
@@ -76,9 +76,9 @@ def run_adaptive_filter(data, alpha, W, epsilon=0.001, delta_min=0.1):
     return {"DRR": drr, "RMSE": rmse, "MAE": mae, "Packets": tx_count}
 
 
-# -------------------------------------------------------------------------
+
 # EXPERIMENT 1: TEMPORAL HOLD-OUT CROSS-VALIDATION
-# -------------------------------------------------------------------------
+
 print("\n" + "=" * 70)
 print("EXPERIMENT 1: Temporal Hold-Out Cross-Validation")
 print("Split physical 8-day data into two independent temporal halves")
@@ -157,9 +157,9 @@ print(f"{'Paper params on Fold A only:':<50} {'0.05':>6} {'10':>4} {result_paper
 print(f"{'Paper params on Fold B only:':<50} {'0.05':>6} {'10':>4} {result_paper_on_B['DRR']:>7.2f}% {result_paper_on_B['RMSE']:>8.4f}")
 
 
-# -------------------------------------------------------------------------
+
 # EXPERIMENT 2: INDEPENDENT PARAMETER SWEEP ON INTEL BERKELEY LAB
-# -------------------------------------------------------------------------
+
 print("\n\n" + "=" * 70)
 print("EXPERIMENT 2: Independent Parameter Sweep on Intel Berkeley Lab Data")
 print("Find optimal (α, W) on a completely independent dataset")
@@ -239,9 +239,8 @@ for w in windows:
     print(f"{w:>8} {r['DRR']:>7.2f}% {r['RMSE']:>8.4f} {r['MAE']:>8.4f} {r['Packets']:>8}{marker}")
 
 
-# -------------------------------------------------------------------------
 # EXPERIMENT 3: PARAMETER STABILITY ANALYSIS (Bootstrap)
-# -------------------------------------------------------------------------
+
 print("\n\n" + "=" * 70)
 print("EXPERIMENT 3: Bootstrap Parameter Stability Analysis")
 print("Resample physical data 100 times, find optimal α each time")
@@ -296,9 +295,9 @@ print(f"\nalpha statistics: Mean={np.mean(bootstrap_alphas):.3f}, Median={np.med
 print(f"W statistics: Mean={np.mean(bootstrap_windows):.1f}, Median={np.median(bootstrap_windows):.1f}, Mode={Counter(bootstrap_windows).most_common(1)[0][0]}")
 
 
-# -------------------------------------------------------------------------
+
 # FINAL SUMMARY
-# -------------------------------------------------------------------------
+
 print("\n\n" + "=" * 70)
 print("FINAL EVIDENCE SUMMARY FOR PAPER")
 print("=" * 70)
