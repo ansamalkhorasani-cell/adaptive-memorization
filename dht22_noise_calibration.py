@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 DHT22 Noise Calibration Script
---------------------------------
+
 This script collects high-frequency samples from a DHT22 sensor in a completely stable,
 insulated environment (e.g., inside a closed box or drawer in a room with no active AC/heating).
 The data will be used to calculate the sensor's inherent noise floor (variance), which provides
@@ -59,7 +59,7 @@ if dht_device is None:
             hum = round(50.0 + random.normalvariate(0, 0.1), 1)
             return temp, hum
 
-# --- EXPERIMENT SETUP ---
+# EXPERIMENT SETUP 
 SAMPLING_INTERVAL = 10  # Seconds between readings
 DURATION_HOURS = 3      # Total experiment duration
 TOTAL_SAMPLES = int((DURATION_HOURS * 3600) / SAMPLING_INTERVAL)
