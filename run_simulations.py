@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Adaptive Memorization: Physical Data Processing, Benchmarking, and Sensitivity Analysis
------------------------------------------------------------------------------------------
+
 This script processes the user's real physical deployment datasets:
 1. data_raw.csv (Ground Truth Baseline)
 2. data_adaptive_memo.csv (Proposed Adaptive Memorization Transmissions)
@@ -43,9 +43,9 @@ if missing_files:
     print("Please make sure you have copied them to: " + WORK_DIR)
     sys.exit(1)
 
-# -------------------------------------------------------------------------
+
 # 1. LOAD AND PREPROCESS REAL DATA
-# -------------------------------------------------------------------------
+
 print("[INFO] Loading physical deployment datasets...")
 df_raw = pd.read_csv('data_raw.csv')
 df_adaptive = pd.read_csv('data_adaptive_memo.csv')
@@ -63,9 +63,9 @@ df_raw = df_raw.sort_values('Timestamp').reset_index(drop=True)
 df_adaptive = df_adaptive.sort_values('Timestamp').reset_index(drop=True)
 df_fixed = df_fixed.sort_values('Timestamp').reset_index(drop=True)
 
-# -------------------------------------------------------------------------
+
 # 2. ZOH SIGNAL RECONSTRUCTION
-# -------------------------------------------------------------------------
+
 print("[INFO] Reconstructing signals using Zero-Order Hold (ZOH)...")
 # merge_asof matches raw timestamps backward to the last transmission
 df_rec_ad = pd.merge_asof(
@@ -127,9 +127,9 @@ print(f"Total Raw Readings: {N_raw}")
 print(f"Adaptive Memorization: Packets={N_ad}, DRR={drr_ad:.2f}%, RMSE={rmse_ad:.4f}°C, MAE={mae_ad:.4f}°C, MaxErr={max_err_ad:.2f}°C, APR={apr_ad:.2f}%")
 print(f"Fixed Memorization:    Packets={N_fixed}, DRR={drr_fixed:.2f}%, RMSE={rmse_fixed:.4f}°C, MAE={mae_fixed:.4f}°C, MaxErr={max_err_fixed:.2f}°C, APR={apr_fixed:.2f}%")
 
-# -------------------------------------------------------------------------
+
 # 3. NOISE FLOOR CALIBRATION ANALYSIS
-# -------------------------------------------------------------------------
+
 print("\n[INFO] Analyzing DHT22 noise floor calibration data...")
 df_noise = pd.read_csv('dht22_noise_data.csv')
 noise_temp = df_noise['temperature'].values
@@ -156,9 +156,9 @@ with open('noise_calibration_results.txt', 'w') as f:
     f.write(f"Humidity SD (Noise Floor): {noise_hum_sd:.6f} %\n")
     f.write(f"Humidity Variance: {noise_hum_var:.6f} %^2\n")
 
-# -------------------------------------------------------------------------
+
 # 4. BENCHMARK COMPARISONS (Uniform, Random, PLA at Adaptive packet budget)
-# -------------------------------------------------------------------------
+
 print("\n[INFO] Simulating benchmark models at matching packet budget (Budget = " + str(N_ad) + ")...")
 
 def uniform_sampling(data, budget):
@@ -247,9 +247,9 @@ print(f" - Uniform: {rmse_uni:.4f}°C")
 print(f" - Random:  {rmse_rand:.4f}°C")
 print(f" - PLA:     {rmse_pla:.4f}°C")
 
-# -------------------------------------------------------------------------
+
 # 5. STATISTICAL VALIDATION
-# -------------------------------------------------------------------------
+
 print("\n[INFO] Performing statistical equivalence and hypothesis testing...")
 # Wilcoxon signed-rank test
 stat_wil, p_wil = wilcoxon(raw_temp, rec_temp_ad)
@@ -263,9 +263,9 @@ if p_ks > 0.05:
 else:
     print("[INFO] Reconstructed signal distribution is closely aligned (KS stat = {:.4f}).".format(stat_ks))
 
-# -------------------------------------------------------------------------
+
 # 6. LORA ENERGY SENSITIVITY ANALYSIS (SF7-SF12)
-# -------------------------------------------------------------------------
+
 print("\n[INFO] Executing LoRa Spreading Factor Energy Sensitivity Analysis...")
 V_supply = 3.3
 I_tx_mA = 120.0
@@ -331,9 +331,9 @@ print(df_energy.to_string(index=False, formatters={
     "Extension (vs Raw)": "{:.2f}x".format
 }))
 
-# -------------------------------------------------------------------------
+
 # 7. SYNTHETIC NOISE INJECTION STUDY ON PHYSICAL DATA
-# -------------------------------------------------------------------------
+
 print("\n[INFO] Running noise injection study on physical baseline...")
 noise_stds = [0.0, 0.05, 0.10, 0.20, 0.30, 0.50, 0.70, 1.00]
 noise_study = []
@@ -383,9 +383,9 @@ for sd in noise_stds:
 df_noise_study = pd.DataFrame(noise_study)
 print(df_noise_study.to_string(index=False))
 
-# -------------------------------------------------------------------------
+
 # 8. INTEL LAB DATASET VALIDATION (DOWNLOAD OR SIMULATION FALLBACK)
-# -------------------------------------------------------------------------
+
 print("\n[INFO] Loading/Downloading Intel Berkeley Lab dataset for validation...")
 download_success = False
 local_intel_gz = "data.txt.gz"
@@ -483,9 +483,9 @@ print(f"\n=== PUBLIC INTEL LAB VALIDATION ===")
 print(f"{stable_label}:   N={len(mote1)}, DRR = {drr_m1:.2f}%, RMSE = {rmse_m1:.4f}°C, Packets = {tx_m1}")
 print(f"{volatile_label}: N={len(mote21)}, DRR = {drr_m21:.2f}%, RMSE = {rmse_m21:.4f}°C, Packets = {tx_m21}")
 
-# -------------------------------------------------------------------------
+
 # 9. PLOTTING THE 5 RESEARCH FIGURES
-# -------------------------------------------------------------------------
+
 print("\n[INFO] Generating and saving figures using physical data...")
 
 # Figure 1: Pareto Frontier
